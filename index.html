@@ -3,40 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3D Viewer Рабочий</title>
+<title>3D Viewer рабочий</title>
 <style>
-    body { margin:0; text-align:center; font-family: Arial; background: #f5f5f5; }
-    #container { width: 100%; height: 500px; margin: 20px auto; }
-    input, button, select { margin:5px; padding:5px 10px; font-size:14px; }
+body { margin:0; text-align:center; font-family: Arial; background:#f5f5f5; }
+#container { width:100%; height:500px; margin:20px auto; }
+input, button, select { margin:5px; padding:5px 10px; font-size:14px; }
 </style>
 </head>
 <body>
 
 <h1>3D Viewer Рабочий</h1>
 
-<!-- Выбор модели из папки -->
 <select id="modelSelect">
-    <option value="models/scan1.glb">scan1</option>
-    <option value="models/scan2.glb">scan2</option>
-    <!-- Для новых моделей добавляйте <option value="models/имя.glb">имя</option> -->
+<option value="models/scan1.glb">scan1</option>
+<option value="models/scan2.glb">scan2</option>
 </select>
 <button id="loadSelected">Загрузить модель</button>
 <br>
 
-<!-- Вращение по осям -->
 <label>X (°): <input type="number" id="rotX" value="0"></label>
 <label>Y (°): <input type="number" id="rotY" value="0"></label>
 <label>Z (°): <input type="number" id="rotZ" value="0"></label>
 <button id="applyRotation">Применить вращение</button>
 <br>
 
-<!-- Масштаб -->
 <label>Масштаб: <input type="number" id="scale" value="1" step="0.1"></label>
 <button id="applyScale">Применить масштаб</button>
 
 <div id="container"></div>
 
-<!-- Three.js -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
@@ -63,7 +58,6 @@ scene.add(light);
 const loader = new THREE.GLTFLoader();
 let model = null;
 
-// Функция загрузки модели из папки models
 function loadModel(url) {
     loader.load(url, gltf => {
         if(model) scene.remove(model);
@@ -71,15 +65,14 @@ function loadModel(url) {
         model.rotation.set(0,0,0);
         model.scale.set(1,1,1);
         scene.add(model);
-    }, undefined, function(error){
+    }, undefined, error => {
         console.error("Ошибка загрузки модели:", error);
     });
 }
 
-// Загрузка модели по умолчанию
+// Загрузка дефолтной модели
 loadModel('models/scan1.glb');
 
-// Анимация
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
@@ -87,13 +80,11 @@ function animate() {
 }
 animate();
 
-// Переключение модели
 document.getElementById('loadSelected').addEventListener('click', () => {
     const url = document.getElementById('modelSelect').value;
     loadModel(url);
 });
 
-// Вращение модели
 document.getElementById('applyRotation').addEventListener('click', () => {
     if(model){
         model.rotation.x = THREE.MathUtils.degToRad(Number(document.getElementById('rotX').value));
@@ -102,7 +93,6 @@ document.getElementById('applyRotation').addEventListener('click', () => {
     }
 });
 
-// Масштаб модели
 document.getElementById('applyScale').addEventListener('click', () => {
     if(model){
         const s = Number(document.getElementById('scale').value);
