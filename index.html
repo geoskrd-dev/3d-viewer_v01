@@ -8,25 +8,81 @@
   <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
       background: #f0f0f0;
+      transition: background 0.3s ease;
     }
+
     model-viewer {
       width: 90vw;
       height: 70vh;
       background-color: #fff;
       border-radius: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    #toggleTheme {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #222;
+      color: #fff;
+      transition: all 0.3s ease;
     }
   </style>
 </head>
 <body>
-  <model-viewer src="models/scan1.glb" alt="3D Scan"
-                auto-rotate camera-controls 
-                ar
-                shadow-intensity="1">
+
+  <model-viewer 
+        id="viewer"
+        src="models/scan.glb"
+        alt="3D Scan"
+        auto-rotate 
+        camera-controls
+        shadow-intensity="1"
+        exposure="1"
+        environment-image="neutral"
+        camera-orbit="0deg 75deg 2m"
+        min-camera-orbit="auto auto 1m"
+        max-camera-orbit="auto auto 4m"
+        field-of-view="45deg"
+        interpolation-decay="200">
   </model-viewer>
+
+  <button id="toggleTheme">Тёмная тема</button>
+
+  <script>
+    const body = document.body;
+    const viewer = document.getElementById('viewer');
+    const button = document.getElementById('toggleTheme');
+
+    let dark = false;
+
+    button.addEventListener('click', () => {
+      dark = !dark;
+
+      if (dark) {
+        body.style.background = "#111";
+        viewer.style.backgroundColor = "#000";
+        button.textContent = "Светлая тема";
+        button.style.background = "#eee";
+        button.style.color = "#000";
+      } else {
+        body.style.background = "#f0f0f0";
+        viewer.style.backgroundColor = "#fff";
+        button.textContent = "Тёмная тема";
+        button.style.background = "#222";
+        button.style.color = "#fff";
+      }
+    });
+  </script>
+
 </body>
 </html>
